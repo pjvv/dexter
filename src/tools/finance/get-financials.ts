@@ -55,7 +55,6 @@ function formatSubToolName(name: string): string {
 import { getIncomeStatements, getBalanceSheets, getCashFlowStatements, getAllFinancialStatements } from './fundamentals.js';
 import { getKeyRatios, getHistoricalKeyRatios } from './key-ratios.js';
 import { getAnalystEstimates } from './estimates.js';
-import { getSegmentedRevenues } from './segments.js';
 import { getEarnings } from './earnings.js';
 
 // All finance tools available for routing
@@ -71,8 +70,6 @@ const FINANCE_TOOLS: StructuredToolInterface[] = [
   getKeyRatios,
   getHistoricalKeyRatios,
   getAnalystEstimates,
-  // Other Data
-  getSegmentedRevenues,
 ];
 
 // Create a map for quick tool lookup by name

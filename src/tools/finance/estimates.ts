@@ -1,8 +1,7 @@
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { z } from 'zod';
-import { api } from './api.js';
 import { formatToolResult } from '../types.js';
-import { TTL_6H } from './utils.js';
+import { fetchAnalystEstimates } from './providers/yahoo.js';
 
 const AnalystEstimatesInputSchema = z.object({
   ticker: z
@@ -18,15 +17,10 @@ const AnalystEstimatesInputSchema = z.object({
 
 export const getAnalystEstimates = new DynamicStructuredTool({
   name: 'get_analyst_estimates',
-  description: `Retrieves analyst estimates for a given company ticker, including metrics like estimated EPS. Useful for understanding consensus expectations, assessing future growth prospects, and performing valuation analysis.`,
+  description: `Retrieves analyst estimates for a given company ticker, including metrics like estimated EPS and revenue. Useful for understanding consensus expectations, assessing future growth prospects, and performing valuation analysis.`,
   schema: AnalystEstimatesInputSchema,
   func: async (input) => {
-    const params = {
-      ticker: input.ticker,
-      period: input.period,
-    };
-    const { data, url } = await api.get('/analyst-estimates/', params, { cacheable: true, ttlMs: TTL_6H });
-    return formatToolResult(data.analyst_estimates || [], [url]);
+    const { data, url } = await fetchAnalystEstimates(input);
+    return formatToolResult(data.analyst_estimates, [url]);
   },
 });
-

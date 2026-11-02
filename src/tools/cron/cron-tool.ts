@@ -51,22 +51,29 @@ Write it as a clear instruction, e.g.: "Check the current price of AAPL. If it h
 - Minimum interval for "every" schedules is 60 seconds
 `.trim();
 
-const scheduleSchema = z.discriminatedUnion('kind', [
-  z.object({
-    kind: z.literal('at'),
-    at: z.string().describe('ISO-8601 timestamp for one-shot execution'),
-  }),
-  z.object({
-    kind: z.literal('every'),
-    everyMs: z.number().min(60000).describe('Interval in milliseconds (minimum 60000 = 1 minute)'),
-    anchorMs: z.number().optional().describe('Optional anchor timestamp in ms'),
-  }),
-  z.object({
-    kind: z.literal('cron'),
-    expr: z.string().describe('Cron expression (5 or 6 fields)'),
-    tz: z.string().optional().describe('IANA timezone (default: system timezone)'),
-  }),
-]);
+// Flat schema (instead of discriminatedUnion) — some LLM providers (e.g. Gemini)
+// reject the `const` keyword that discriminatedUnion produces for the
+// discriminator. Runtime validation in the executor still enforces the right
+// fields per kind via computeNextRunAtMs / executeCronJob.
+const scheduleSchema = z
+  .object({
+    kind: z.enum(['at', 'every', 'cron']).describe('Schedule type'),
+    at: z
+      .string()
+      .optional()
+      .describe('ISO-8601 timestamp — required when kind="at"'),
+    everyMs: z
+      .number()
+      .min(60000)
+      .optional()
+      .describe('Interval in milliseconds (min 60000) — required when kind="every"'),
+    anchorMs: z.number().optional().describe('Optional anchor timestamp in ms (kind="every")'),
+    expr: z.string().optional().describe('Cron expression (5 or 6 fields) — required when kind="cron"'),
+    tz: z.string().optional().describe('IANA timezone (kind="cron" only)'),
+  })
+  .describe(
+    'Schedule configuration. Fields required per kind: at→at, every→everyMs, cron→expr.',
+  );
 
 const cronToolSchema = z.object({
   action: z.enum(['list', 'add', 'update', 'remove', 'run']),

@@ -13,7 +13,7 @@
   - Model/LLM: `src/model/llm.ts` (multi-provider LLM abstraction)
   - Tools: `src/tools/` (financial search, web search, browser, skill tool)
   - Tool descriptions: `src/tools/descriptions/` (rich descriptions injected into system prompt)
-  - Finance tools: `src/tools/finance/` (prices, fundamentals, filings, insider trades, etc.)
+  - Finance tools: `src/tools/finance/` (prices, fundamentals, filings, insider trades, etc.) — all backed by Yahoo Finance via `src/tools/finance/providers/yahoo.ts`. No FinancialDatasets.ai key required.
   - Search tools: `src/tools/search/` (Exa preferred, Tavily fallback)
   - Browser: `src/tools/browser/` (Playwright-based web scraping)
   - Skills: `src/skills/` (SKILL.md-based extensible workflows, e.g. DCF valuation)
@@ -80,7 +80,7 @@
 
 - LLM keys: `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`, `XAI_API_KEY`, `OPENROUTER_API_KEY`
 - Ollama: `OLLAMA_BASE_URL` (default `http://127.0.0.1:11434`)
-- Finance: `FINANCIAL_DATASETS_API_KEY`
+- Finance: none required — Yahoo Finance is used (no key). `FINANCIAL_DATASETS_API_KEY` is no longer read.
 - Search: `EXASEARCH_API_KEY` (preferred), `TAVILY_API_KEY` (fallback)
 - Tracing: `LANGSMITH_API_KEY`, `LANGSMITH_ENDPOINT`, `LANGSMITH_PROJECT`, `LANGSMITH_TRACING`
 - Never commit `.env` files or real API keys.

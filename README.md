@@ -37,8 +37,9 @@ Dexter takes complex financial questions and turns them into clear, step-by-step
 
 - [Bun](https://bun.com) runtime (v1.0 or higher)
 - OpenAI API key (get [here](https://platform.openai.com/api-keys))
-- Financial Datasets API key (get [here](https://financialdatasets.ai))
 - Exa API key (get [here](https://exa.ai)) - optional, for web search
+
+Financial market data (prices, fundamentals, filings, news, analyst estimates, insider trades) is fetched via Yahoo Finance through the [`yahoo-finance2`](https://www.npmjs.com/package/yahoo-finance2) package. No financial-data API key is required.
 
 #### Installing Bun
 
@@ -83,9 +84,6 @@ cp env.example .env
 # GOOGLE_API_KEY=your-google-api-key (optional)
 # XAI_API_KEY=your-xai-api-key (optional)
 # OPENROUTER_API_KEY=your-openrouter-api-key (optional)
-
-# Institutional-grade market data for agents
-# FINANCIAL_DATASETS_API_KEY=your-financial-datasets-api-key
 
 # (Optional) If using Ollama locally
 # OLLAMA_BASE_URL=http://127.0.0.1:11434

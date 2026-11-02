@@ -216,23 +216,6 @@ export function formatCryptoPrice(data: unknown): string {
   return `${ticker}: ${fmtPrice(d.close ?? d.price)} (H: ${fmtPrice(d.high)} L: ${fmtPrice(d.low)}) Vol: ${fmtNum(d.volume)}`;
 }
 
-export function formatSegmentedRevenues(data: unknown, args?: Rec): string {
-  const items = Array.isArray(data) ? data : [];
-  if (items.length === 0) return 'No segment data available.';
-  const ticker = (args?.ticker as string)?.toUpperCase() ?? '';
-  const lines = [`${ticker} Revenue Segments`, ''];
-  for (const period of items as Rec[]) {
-    lines.push(`**${fmtDate(period.report_period)}**`);
-    const segments = (period.segments ?? period.revenue_segments) as Rec[] | undefined;
-    if (Array.isArray(segments)) {
-      for (const seg of segments) {
-        lines.push(`- ${seg.label ?? seg.name ?? 'Unknown'}: ${fmtNum(seg.value ?? seg.revenue)}`);
-      }
-    }
-  }
-  return lines.join('\n');
-}
-
 // ---------------------------------------------------------------------------
 // Formatter registry — maps sub-tool names to formatters
 // ---------------------------------------------------------------------------
@@ -246,7 +229,6 @@ export const FINANCIAL_FORMATTERS: Record<string, (data: unknown, args?: Rec) =>
   get_historical_key_ratios: formatHistoricalKeyRatios,
   get_analyst_estimates: formatAnalystEstimates,
   get_earnings: formatEarnings,
-  get_segmented_revenues: formatSegmentedRevenues,
 };
 
 export const MARKET_DATA_FORMATTERS: Record<string, (data: unknown, args?: Rec) => string> = {

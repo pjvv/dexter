@@ -1,5 +1,5 @@
 import { StructuredToolInterface } from '@langchain/core/tools';
-import { createGetFinancials, createGetMarketData, createReadFilings, createScreenStocks } from './finance/index.js';
+import { createGetFinancials, createGetMarketData, createReadFilings } from './finance/index.js';
 import { exaSearch, perplexitySearch, tavilySearch, WEB_SEARCH_DESCRIPTION, xSearchTool, X_SEARCH_DESCRIPTION } from './search/index.js';
 import { skillTool, SKILL_TOOL_DESCRIPTION } from './skill.js';
 import { webFetchTool, WEB_FETCH_DESCRIPTION } from './fetch/web-fetch.js';
@@ -10,7 +10,6 @@ import { editFileTool, EDIT_FILE_DESCRIPTION } from './filesystem/edit-file.js';
 import { GET_FINANCIALS_DESCRIPTION } from './finance/get-financials.js';
 import { GET_MARKET_DATA_DESCRIPTION } from './finance/get-market-data.js';
 import { READ_FILINGS_DESCRIPTION } from './finance/read-filings.js';
-import { SCREEN_STOCKS_DESCRIPTION } from './finance/screen-stocks.js';
 import { heartbeatTool, HEARTBEAT_TOOL_DESCRIPTION } from './heartbeat/heartbeat-tool.js';
 import { cronTool, CRON_TOOL_DESCRIPTION } from './cron/cron-tool.js';
 import { memoryGetTool, MEMORY_GET_DESCRIPTION, memorySearchTool, MEMORY_SEARCH_DESCRIPTION, memoryUpdateTool, MEMORY_UPDATE_DESCRIPTION } from './memory/index.js';
@@ -60,13 +59,6 @@ export function getToolRegistry(model: string): RegisteredTool[] {
       tool: createReadFilings(model),
       description: READ_FILINGS_DESCRIPTION,
       compactDescription: 'SEC filings (10-K, 10-Q, 8-K). Extracts and summarizes specific filing sections.',
-      concurrencySafe: true,
-    },
-    {
-      name: 'stock_screener',
-      tool: createScreenStocks(model),
-      description: SCREEN_STOCKS_DESCRIPTION,
-      compactDescription: 'Screen stocks by financial criteria (P/E, growth, margins, etc.).',
       concurrencySafe: true,
     },
     {
